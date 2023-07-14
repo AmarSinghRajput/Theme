@@ -24,6 +24,14 @@ let package = Package(
         .target(
             name: "ThemesPackage",
             dependencies: []),
+        .target(
+            name: "Extensions",
+            dependencies: []),
+        
+            .target(
+                name: "Utility",
+                dependencies: []),
+            
         .testTarget(
             name: "ThemesPackageTests",
             dependencies: ["ThemesPackage"]),
