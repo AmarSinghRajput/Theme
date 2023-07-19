@@ -12,7 +12,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "ThemesPackage",
-            targets: ["ThemesPackage", "Extensions", "Utility"]),
+            targets: ["ThemesPackage"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -24,14 +24,7 @@ let package = Package(
         .target(
             name: "ThemesPackage",
             dependencies: []),
-        .target(
-            name: "Extensions",
-            dependencies: []),
-        
-            .target(
-                name: "Utility",
-                dependencies: []),
-            
+                    
         .testTarget(
             name: "ThemesPackageTests",
             dependencies: ["ThemesPackage"]),

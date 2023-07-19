@@ -8,11 +8,11 @@
 import SwiftUI
 
 public struct ThemeData: Codable, Hashable, Equatable {
-    public let name: String
-    public let colors: ColorData
-    public let shapes: ShapeData
-    public let spacing: SpacingData
-    public let typography: TypographyData
+    let name: String
+    let colors: ColorData
+    let shapes: ShapeData
+    let spacing: SpacingData
+    let typography: TypographyData
     
     // Implement the Hashable protocol
     public func hash(into hasher: inout Hasher) {

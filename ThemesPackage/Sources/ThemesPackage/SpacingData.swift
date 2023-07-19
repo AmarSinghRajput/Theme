@@ -8,10 +8,10 @@
 import SwiftUI
 
 public struct SpacingData: Codable, Hashable, Equatable {
-    public let largeSpacing: CGFloat
-    public let mediumSpacing: CGFloat
-    public let smallSpacing: CGFloat
-    public let extraLargeSpacing: CGFloat
+    let largeSpacing: CGFloat
+    let mediumSpacing: CGFloat
+    let smallSpacing: CGFloat
+    let extraLargeSpacing: CGFloat
     
     // Implement the Hashable protocol
     public func hash(into hasher: inout Hasher) {

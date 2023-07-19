@@ -10,8 +10,9 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 public class ThemeManager: ObservableObject {
-    @AppStorage("selectedTheme") public var selectedTheme: String = "light"
-    @AppStorage("currentThemeIndex") public var currentThemeIndex: Int = 0 {
+    @Published public var themes: [ThemeData] = []
+    @AppStorage(UserDefaultsKeys.selectedTheme) public var selectedTheme: String = ""
+    @AppStorage(UserDefaultsKeys.currentThemeIndex) public var currentThemeIndex: Int = 0 {
         didSet {
             updateSelectedTheme()
         }
@@ -19,36 +20,34 @@ public class ThemeManager: ObservableObject {
     public var currentTheme: ThemeData? {
         themes.first { $0.name == selectedTheme }
     }
-    @Published public var themes: [ThemeData] = []
-    public init() {
-        loadThemesFromJSON()
-    }
     
-    public func loadThemesFromJSON() {
-        if let url = Bundle.main.url(forResource: "themes", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let jsonData = try decoder.decode([String: [ThemeData]].self, from: data)
-                self.themes = jsonData["themes"] ?? []
-            } catch {
-                print("Error decoding JSON: \(error)")
-            }
+    public init(themes: [ThemeData] = []) {
+        self.themes = themes
+        if let defaultTheme = themes.first?.name, selectedTheme == "" {
+            selectedTheme = defaultTheme
+        }
+        saveThemesToUserDefaults()
+    }
+}
+
+extension ThemeManager {
+    public func saveThemesToUserDefaults() {
+        let encoder = JSONEncoder()
+        if let encodedData = try? encoder.encode(themes) {
+            UserDefaults.standard.set(encodedData, forKey: UserDefaultsKeys.themes)
         }
     }
     
-    public func saveThemesToJSON() {
-        let jsonData: [String: [ThemeData]] = ["themes": themes]
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(jsonData)
-            if let url = Bundle.main.url(forResource: "themes", withExtension: "json") {
-                try data.write(to: url)
+    public func loadThemesFromUserDefaults() -> [ThemeData] {
+        if let encodedData = UserDefaults.standard.data(forKey: UserDefaultsKeys.themes) {
+            let decoder = JSONDecoder()
+            if let decodedThemes = try? decoder.decode([ThemeData].self, from: encodedData) {
+                return decodedThemes
             }
-        } catch {
-            print("Error encoding JSON: \(error)")
         }
+        return []
     }
+    
     
     public func updateSelectedTheme() {
         guard currentThemeIndex >= 0 && currentThemeIndex < themes.count else {
@@ -56,7 +55,23 @@ public class ThemeManager: ObservableObject {
         }
         selectedTheme = themes[currentThemeIndex].name
     }
-   
+    
+    public func addThemes(_ theme: ThemeData) {
+        var updatedThemes = loadThemesFromUserDefaults()
+        updatedThemes.append(theme)
+        saveThemesToUserDefaults(updatedThemes)
+        themes = updatedThemes
+    }
+    
+    private func saveThemesToUserDefaults(_ themes: [ThemeData]) {
+        let encoder = JSONEncoder()
+        if let encodedData = try? encoder.encode(themes) {
+            UserDefaults.standard.set(encodedData, forKey: UserDefaultsKeys.themes)
+        }
+    }
+}
+
+extension ThemeManager {
     public func currentThemeColor(_ keyPath: KeyPath<ColorData, String>) -> Color {
         guard let currentTheme = currentTheme else {
             return Color.clear
@@ -64,12 +79,4 @@ public class ThemeManager: ObservableObject {
         let colorValue = currentTheme.colors[keyPath: keyPath]
         return Color(hex: colorValue)
     }
-    
-    public func addTheme(_ theme: ThemeData) {
-        themes.append(theme)
-        updateSelectedTheme()
-        saveThemesToJSON()
-    }
 }
-
-

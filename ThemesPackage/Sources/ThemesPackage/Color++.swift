@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 extension Color {
     public init(hex: String) {
         var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -25,4 +24,13 @@ extension Color {
         
         self.init(red: red, green: green, blue: blue)
     }
+}
+
+public func getRandomHexColor() -> String {
+    let letters = "0123456789ABCDEF"
+    var color = "#"
+    for _ in 0..<6 {
+        color.append(letters.randomElement()!)
+    }
+    return color
 }

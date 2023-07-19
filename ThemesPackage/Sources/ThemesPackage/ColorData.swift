@@ -8,17 +8,17 @@
 import SwiftUI
 
 public struct ColorData: Codable, Hashable, Equatable {
-    public let primary: String
-    public let primaryVariant: String
-    public let secondary: String
-    public let background: String
-    public let surface: String
-    public let onPrimary: String
-    public let onBackground: String
-    public let onSurface: String
-    public let error: String
-    public let onError: String
-    public let festive: String
+    let primary: String
+    let primaryVariant: String
+    let secondary: String
+    let background: String
+    let surface: String
+    let onPrimary: String
+    let onBackground: String
+    let onSurface: String
+    let error: String
+    let onError: String
+    let festive: String
     
     // Implement the Hashable protocol
     public func hash(into hasher: inout Hasher) {

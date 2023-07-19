@@ -8,9 +8,9 @@
 import SwiftUI
 
 public struct ShapeData: Codable, Hashable, Equatable {
-    public let largeCornerRadius: CGFloat
-    public let mediumCornerRadius: CGFloat
-    public let smallCornerRadius: CGFloat
+    let largeCornerRadius: CGFloat
+    let mediumCornerRadius: CGFloat
+    let smallCornerRadius: CGFloat
     
     // Implement the Hashable protocol
     public func hash(into hasher: inout Hasher) {
